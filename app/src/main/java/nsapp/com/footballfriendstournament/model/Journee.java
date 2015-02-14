@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.ArrayList;
 
 import nsapp.com.footballfriendstournament.R;
+import nsapp.com.footballfriendstournament.model.championnat.Championnat;
 
 public class Journee extends ArrayList<Match> {
 

@@ -11,10 +11,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import nsapp.com.footballfriendstournament.model.Championnat;
-import nsapp.com.footballfriendstournament.model.Classement;
+import nsapp.com.footballfriendstournament.model.championnat.Championnat;
 import nsapp.com.footballfriendstournament.model.Equipe;
 import nsapp.com.footballfriendstournament.model.Match;
 
@@ -40,7 +38,7 @@ public class MainFragment extends Fragment {
         final Equipe equipe3 = new Equipe("Bordeaux");
         final Equipe equipe4 = new Equipe("Coutras");
 
-        final Championnat championnat = new Championnat(getActivity(), new ArrayList<Equipe>() {{
+        final Championnat championnat = Championnat.getInstance(getActivity(), new ArrayList<Equipe>() {{
             add(equipe1);
             add(equipe2);
             add(equipe3);
