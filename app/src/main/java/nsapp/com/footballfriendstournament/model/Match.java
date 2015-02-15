@@ -2,53 +2,45 @@ package nsapp.com.footballfriendstournament.model;
 
 public class Match {
 
-    public Equipe getDomicile() {
-        return domicile;
+    public Team getHome() {
+        return home;
     }
 
-    public Equipe getExterieure() {
-        return exterieure;
+    public Team getOutside() {
+        return outside;
     }
 
-    public void setDomicile(Equipe domicile) {
-        this.domicile = domicile;
-    }
-
-    public void setExterieure(Equipe exterieure) {
-        this.exterieure = exterieure;
-    }
-
-    private Equipe domicile;
-    private Equipe exterieure;
+    private Team home;
+    private Team outside;
     private boolean isFinished;
 
     public Match() {
-        this.domicile = null;
-        this.exterieure = null;
+        this.home = null;
+        this.outside = null;
     }
 
-    public Match(Equipe domicile, Equipe exterieure) {
-        this.domicile = domicile;
-        this.exterieure = exterieure;
+    public Match(Team home, Team outside) {
+        this.home = home;
+        this.outside = outside;
     }
 
-    public void scoreFinalChampionnat(int nbButsD, int nbButsE, int cartonsRougesD, int cartonsJaunesD, int cartonsRougesE, int cartonsJaunesE) {
-        if (nbButsD > nbButsE) {
-            domicile.victoire(nbButsD, nbButsE, cartonsRougesD, cartonsJaunesD);
-            exterieure.defaite(nbButsE, nbButsD, cartonsRougesE, cartonsJaunesE);
-        } else if (nbButsD < nbButsE) {
-            domicile.defaite(nbButsD, nbButsE, cartonsRougesD, cartonsJaunesD);
-            exterieure.victoire(nbButsE, nbButsD, cartonsRougesE, cartonsJaunesE);
+    public void finalScoreLeague(int homeGoals, int outsideGoals, int homeRedCards, int homeYellowCards, int outsideRedCards, int outsideYellowCards) {
+        if (homeGoals > outsideGoals) {
+            home.victoire(homeGoals, outsideGoals, homeRedCards, homeYellowCards);
+            outside.defeat(outsideGoals, homeGoals, outsideRedCards, outsideYellowCards);
+        } else if (homeGoals < outsideGoals) {
+            home.defeat(homeGoals, outsideGoals, homeRedCards, homeYellowCards);
+            outside.victoire(outsideGoals, homeGoals, outsideRedCards, outsideYellowCards);
         } else {
-            domicile.matchNul(nbButsD, nbButsE, cartonsRougesD, cartonsJaunesD);
-            exterieure.matchNul(nbButsE, nbButsD, cartonsRougesE, cartonsJaunesE);
+            home.matchNul(homeGoals, outsideGoals, homeRedCards, homeYellowCards);
+            outside.matchNul(outsideGoals, homeGoals, outsideRedCards, outsideYellowCards);
         }
         isFinished = true;
     }
 
-    public Equipe gagnantMatchCoupe(int nbButsD, int nbButsE) {
-        return nbButsD > nbButsE ? domicile
-                : nbButsE > nbButsD ? exterieure
+    public Team winnerMatchCup(int homeGoals, int outsideGoals) {
+        return homeGoals > outsideGoals ? home
+                : outsideGoals > homeGoals ? outside
                 : null;
     }
 
