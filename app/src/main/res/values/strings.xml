@@ -11,5 +11,7 @@
     <string name="action_example">Example action</string>
 
     <string name="action_rss">Feed</string>
+    <string name="action_arrow_bottom">Previous</string>
+    <string name="action_arrow_top">Next</string>
     <string name="id_match_format">%1$d-%2$d</string>
 </resources>
