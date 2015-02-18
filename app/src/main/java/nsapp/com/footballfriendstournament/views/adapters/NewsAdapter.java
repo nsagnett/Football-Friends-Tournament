@@ -15,11 +15,12 @@ import nsapp.com.footballfriendstournament.model.rss.RSSItem;
 public class NewsAdapter extends BaseAdapter {
 
     private final Context context;
-    private final ArrayList<RSSItem> rssItems = new ArrayList<>();
+    private ArrayList<RSSItem> rssItems = new ArrayList<>();
 
     public NewsAdapter(Context context, ArrayList<RSSItem> rssItems) {
+        super();
         this.context = context;
-        this.rssItems.addAll(rssItems);
+        this.rssItems = rssItems;
     }
 
     @Override
@@ -40,17 +41,16 @@ public class NewsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        LayoutInflater inflater = LayoutInflater.from(context);
+        RSSItem rssItem = rssItems.get(position);
 
         if (convertView == null) {
+            LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.news_holder, null);
         }
 
         TextView newsTitle = (TextView) convertView.findViewById(R.id.newsTitle);
         TextView newsDescription = (TextView) convertView.findViewById(R.id.newsDescription);
         TextView newsSource = (TextView) convertView.findViewById(R.id.newsSource);
-
-        RSSItem rssItem = rssItems.get(position);
 
         newsTitle.setText(rssItem.getTitle());
         newsDescription.setText(rssItem.getDescription());

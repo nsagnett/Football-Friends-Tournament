@@ -37,13 +37,12 @@ public class PlayersFragment extends AbstractFragment {
         Button button = (Button) view.findViewById(R.id.goButton);
 
         picker.setMinValue(2);
-        picker.setWrapSelectorWheel(false);
         if (competitionType != null && competitionType.equals(LEAGUE)) {
             picker.setMaxValue(24);
         }else {
             picker.setMaxValue(8);
         }
-
+        picker.setWrapSelectorWheel(false);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
