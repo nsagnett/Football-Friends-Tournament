@@ -1,54 +1,61 @@
 package nsapp.com.footballfriendstournament.views.fragments;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 import nsapp.com.footballfriendstournament.R;
-import nsapp.com.footballfriendstournament.model.GetNewsCallBack;
+import nsapp.com.footballfriendstournament.model.rss.RSSController;
 import nsapp.com.footballfriendstournament.model.rss.RSSItem;
+import nsapp.com.footballfriendstournament.model.tools.Tool;
 import nsapp.com.footballfriendstournament.views.adapters.NewsAdapter;
 
-public class NewsFragment extends AbstractFragment implements AdapterView.OnItemClickListener {
+public class NewsFragment extends AbstractFragment implements AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, AbsListView.OnScrollListener {
 
-    private ArrayList<RSSItem> rssItems = new ArrayList<>();
+    private static final int SHOWING_ARTICLES_DELAY = 3000;
+    private static int COUNT_VISIBLE_ITEMS;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ArrayList<RSSItem> rssItemsLimited = new ArrayList<>();
     private NewsAdapter newsAdapter;
+    private int preLast;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        setTitle(getString(R.string.news));
         View view = inflater.inflate(R.layout.fragment_news, container, false);
+
         ListView listView = (ListView) view.findViewById(R.id.newsListView);
-        rssItems.addAll(mainActivity.getNewsItems());
+        newsAdapter = new NewsAdapter(mainActivity, rssItemsLimited);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.newsSwipeRefresh);
 
-        newsAdapter = new NewsAdapter(mainActivity, rssItems);
-        listView.setAdapter(newsAdapter);
         listView.setOnItemClickListener(this);
+        listView.setOnScrollListener(this);
+        listView.setAdapter(newsAdapter);
 
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.newsSwipeRefresh);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mainActivity.runAsyncTask(new GetNewsCallBack() {
-                    @Override
-                    public void onFinished() {
-                        swipeRefreshLayout.setRefreshing(false);
-                        rssItems.clear();
-                        rssItems.addAll(mainActivity.getNewsItems());
-                        newsAdapter.notifyDataSetChanged();
-                    }
-                });
-            }
-        });
-        swipeRefreshLayout.setColorScheme(android.R.color.holo_blue_dark);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_dark);
+
+        COUNT_VISIBLE_ITEMS = 10;
+
+        if (Tool.news != null && Tool.news.size() > 1) {
+            rssItemsLimited.addAll(Tool.getLimitedItems(Tool.news, COUNT_VISIBLE_ITEMS));
+            newsAdapter.notifyDataSetChanged();
+        }
+
+        onRefresh();
 
         return view;
     }
@@ -57,7 +64,74 @@ public class NewsFragment extends AbstractFragment implements AdapterView.OnItem
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(mainActivity, ArticleActivity.class);
         intent.putExtra(INDEX_ARTICLE, position);
-        intent.putExtra(ARTICLES, mainActivity.getNewsItems());
         startActivity(intent);
+    }
+
+    @Override
+    public void onRefresh() {
+        setVisibleRefreshIndicator();
+        runAsyncTask();
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        final int lastItem = firstVisibleItem + visibleItemCount;
+        if (lastItem == totalItemCount) {
+            if (preLast != lastItem) {
+                preLast = lastItem;
+                setVisibleRefreshIndicator();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setTitle(getString(R.string.news));
+                        COUNT_VISIBLE_ITEMS += 10;
+                        swipeRefreshLayout.setRefreshing(false);
+                        if (!Tool.news.isEmpty()) {
+                            rssItemsLimited.clear();
+                            rssItemsLimited.addAll(Tool.getLimitedItems(Tool.news, COUNT_VISIBLE_ITEMS));
+                            newsAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }, SHOWING_ARTICLES_DELAY);
+            }
+        }
+    }
+
+    public void runAsyncTask() {
+        new AsyncTask<Object, Object, Object>() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                Tool.news.addAll(RSSController.getRSSItems());
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                swipeRefreshLayout.setRefreshing(false);
+                rssItemsLimited.clear();
+                if (Tool.news.size() > 1) {
+                    rssItemsLimited.addAll(Tool.getLimitedItems(Tool.news, COUNT_VISIBLE_ITEMS));
+                } else {
+                    rssItemsLimited.add(new RSSItem(getString(R.string.error_loading), getString(R.string.error_loading), "", ""));
+                }
+                setTitle(getString(R.string.news));
+                newsAdapter.notifyDataSetChanged();
+            }
+        }.execute();
+    }
+
+    private void setVisibleRefreshIndicator() {
+        swipeRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                setTitle(getString(R.string.loading));
+                swipeRefreshLayout.setRefreshing(true);
+            }
+        });
     }
 }

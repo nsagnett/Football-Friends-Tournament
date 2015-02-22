@@ -1,6 +1,5 @@
 package nsapp.com.footballfriendstournament.views.activities;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -8,24 +7,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.ArrayList;
-
 import nsapp.com.footballfriendstournament.R;
 import nsapp.com.footballfriendstournament.model.Competition;
-import nsapp.com.footballfriendstournament.model.GetNewsCallBack;
-import nsapp.com.footballfriendstournament.model.rss.RSSController;
-import nsapp.com.footballfriendstournament.model.rss.RSSItem;
 import nsapp.com.footballfriendstournament.views.fragments.MainFragment;
 import nsapp.com.footballfriendstournament.views.fragments.NewsFragment;
 
 public class MainActivity extends ActionBarActivity {
 
     private Competition competition;
-    private ArrayList<RSSItem> newsItems;
-
-    public ArrayList<RSSItem> getNewsItems() {
-        return newsItems;
-    }
 
     public Competition getCompetition() {
         return competition;
@@ -39,8 +28,6 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        runAsyncTask(null);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.container, (new MainFragment())).commit();
@@ -61,24 +48,6 @@ public class MainActivity extends ActionBarActivity {
             prepareOnReplaceTransaction(new NewsFragment());
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void runAsyncTask(final GetNewsCallBack getNewsCallBack) {
-        new AsyncTask<Object, Object, Object>() {
-            @Override
-            protected Object doInBackground(Object[] params) {
-                newsItems = RSSController.getRSSItems();
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-                if (getNewsCallBack != null) {
-                    getNewsCallBack.onFinished();
-                }
-            }
-        }.execute();
     }
 
     private Fragment getFragment() {

@@ -14,13 +14,11 @@ public class MainFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        setTitle(getString(R.string.menu));
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+
         Button button1 = (Button) view.findViewById(R.id.leagueButton);
         Button button2 = (Button) view.findViewById(R.id.cupButton);
-
-        if (mainActivity.getActionBar() != null) {
-            mainActivity.getActionBar().setTitle("Menu Principal");
-        }
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
