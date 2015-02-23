@@ -14,11 +14,24 @@ public class MainFragment extends AbstractFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        setTitle(getString(R.string.menu));
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
-        Button button1 = (Button) view.findViewById(R.id.leagueButton);
-        Button button2 = (Button) view.findViewById(R.id.cupButton);
+        onSetupModel(view);
+
+        return view;
+    }
+
+    @Override
+    protected void onSetupModel(View inflatedView) {
+        super.onSetupModel(inflatedView);
+        setTitle(getString(R.string.menu));
+        onSetupView(inflatedView);
+    }
+
+    @Override
+    protected void onSetupView(View inflatedView) {
+        Button button1 = (Button) inflatedView.findViewById(R.id.leagueButton);
+        Button button2 = (Button) inflatedView.findViewById(R.id.cupButton);
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -33,7 +46,15 @@ public class MainFragment extends AbstractFragment {
                 mainActivity.prepareOnReplaceTransaction(PlayersFragment.newInstance(CUP));
             }
         });
+    }
 
-        return view;
+    @Override
+    protected void onSetupListener() {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

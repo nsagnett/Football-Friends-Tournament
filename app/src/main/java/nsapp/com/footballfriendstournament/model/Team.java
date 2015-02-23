@@ -1,13 +1,16 @@
 package nsapp.com.footballfriendstournament.model;
 
+import java.util.ArrayList;
+
+import nsapp.com.footballfriendstournament.model.championnat.ContextMatch;
+
 public class Team {
 
     private static int uniqueID = 0;
     private int id;
     private boolean exempt;
-    private boolean atHome;
     private String name;
-    private int matches;
+    private int matchesCount;
     private int wins;
     private int draws;
     private int defeats;
@@ -17,6 +20,8 @@ public class Team {
     private int redCards;
     private String goalDifference;
     private int points;
+
+    private ArrayList<ContextMatch> contextMatches;
 
     public int getId() {
         return id;
@@ -70,20 +75,20 @@ public class Team {
         this.exempt = exempt;
     }
 
-    public boolean atHome() {
-        return atHome;
+    public int getMatchesCount() {
+        return matchesCount;
     }
 
-    public void setAtHome(boolean atHome) {
-        this.atHome = atHome;
+    public ArrayList<ContextMatch> getContextMatches() {
+        return contextMatches;
     }
 
-    public int getMatches() {
-        return matches;
+    public void setContextMatches(ArrayList<ContextMatch> contextMatches) {
+        this.contextMatches = contextMatches;
     }
 
     private void updateStats(int goalsFor, int goalsAgainst, int redCards, int yellowCards) {
-        this.matches++;
+        this.matchesCount++;
         this.goalsFor += goalsFor;
         this.goalsAgainst += goalsAgainst;
         this.redCards += redCards;
@@ -111,11 +116,21 @@ public class Team {
         defeats++;
     }
 
+    public void removeContextMatch(Team adversary) {
+        int length = contextMatches.size();
+        for (int i = 0; i < length; i++) {
+            if (contextMatches.get(i).getAdversary().equals(adversary)) {
+                contextMatches.remove(i);
+                break;
+            }
+        }
+    }
+
     public Team(String name) {
         uniqueID++;
         id = uniqueID;
         this.name = name;
-        matches = 0;
+        matchesCount = 0;
         wins = 0;
         defeats = 0;
         draws = 0;
@@ -123,6 +138,7 @@ public class Team {
         goalsFor = 0;
         yellowCards = 0;
         redCards = 0;
+        contextMatches = new ArrayList<>();
     }
 
     public Team(String name, int wins, int draws, int defeats, int goalsFor, int goalsAgainst, int yellowCards, int redCards, String goalDifference, int points) {

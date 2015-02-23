@@ -26,6 +26,7 @@ public class NewsFragment extends AbstractFragment implements AdapterView.OnItem
     private static int COUNT_VISIBLE_ITEMS;
 
     private SwipeRefreshLayout swipeRefreshLayout;
+    private ListView listView;
     private ArrayList<RSSItem> rssItemsLimited = new ArrayList<>();
     private NewsAdapter newsAdapter;
     private int preLast;
@@ -34,30 +35,42 @@ public class NewsFragment extends AbstractFragment implements AdapterView.OnItem
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        setTitle(getString(R.string.news));
         View view = inflater.inflate(R.layout.fragment_news, container, false);
 
-        ListView listView = (ListView) view.findViewById(R.id.newsListView);
-        newsAdapter = new NewsAdapter(mainActivity, rssItemsLimited);
-        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.newsSwipeRefresh);
-
-        listView.setOnItemClickListener(this);
-        listView.setOnScrollListener(this);
-        listView.setAdapter(newsAdapter);
-
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_dark);
-
-        COUNT_VISIBLE_ITEMS = 10;
-
-        if (Tool.news != null && Tool.news.size() > 1) {
-            rssItemsLimited.addAll(Tool.getLimitedItems(Tool.news, COUNT_VISIBLE_ITEMS));
-            newsAdapter.notifyDataSetChanged();
-        }
+        onSetupModel(view);
 
         onRefresh();
 
         return view;
+    }
+
+    @Override
+    protected void onSetupModel(View inflatedView) {
+        super.onSetupModel(inflatedView);
+        setTitle(getString(R.string.news));
+        COUNT_VISIBLE_ITEMS = 10;
+        if (Tool.news != null && Tool.news.size() > 1) {
+            rssItemsLimited.addAll(Tool.getLimitedItems(Tool.news, COUNT_VISIBLE_ITEMS));
+        }
+        onSetupView(inflatedView);
+    }
+
+    @Override
+    protected void onSetupView(View inflatedView) {
+        listView = (ListView) inflatedView.findViewById(R.id.newsListView);
+        newsAdapter = new NewsAdapter(mainActivity, rssItemsLimited);
+        listView.setAdapter(newsAdapter);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) inflatedView.findViewById(R.id.newsSwipeRefresh);
+        swipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_dark);
+        onSetupListener();
+    }
+
+    @Override
+    protected void onSetupListener() {
+        listView.setOnItemClickListener(this);
+        listView.setOnScrollListener(this);
+        swipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -101,7 +114,7 @@ public class NewsFragment extends AbstractFragment implements AdapterView.OnItem
         }
     }
 
-    public void runAsyncTask() {
+    private void runAsyncTask() {
         new AsyncTask<Object, Object, Object>() {
             @Override
             protected Object doInBackground(Object[] params) {
@@ -133,5 +146,10 @@ public class NewsFragment extends AbstractFragment implements AdapterView.OnItem
                 swipeRefreshLayout.setRefreshing(true);
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        // Required
     }
 }

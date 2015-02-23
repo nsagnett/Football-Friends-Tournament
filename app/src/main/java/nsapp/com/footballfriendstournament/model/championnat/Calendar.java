@@ -4,14 +4,13 @@ import android.content.Context;
 
 import java.util.ArrayList;
 
-import nsapp.com.footballfriendstournament.model.Day;
 import nsapp.com.footballfriendstournament.model.Team;
 import nsapp.com.footballfriendstournament.model.Match;
 
 public class Calendar extends ArrayList<Day> {
 
     public Calendar(Context context, final ArrayList<Team> teams) {
-        int count = 0;
+        int count = 1;
         int taille = teams.size();
         while (count < taille) {
             add(new Day(context, new ArrayList<Team>() {{

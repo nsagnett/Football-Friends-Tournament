@@ -17,6 +17,10 @@ import nsapp.com.footballfriendstournament.model.coupe.Cup;
 
 public class PlayersFragment extends AbstractFragment {
 
+    private NumberPicker playersCountPicker;
+
+    private String competitionType;
+
     public static PlayersFragment newInstance(String competitionType) {
         PlayersFragment playersFragment = new PlayersFragment();
         Bundle args = new Bundle();
@@ -31,32 +35,23 @@ public class PlayersFragment extends AbstractFragment {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_players, container, false);
 
-        String competitionType = getArguments().getString(COMPETITION_TYPE);
+        onSetupModel(view);
 
-        final NumberPicker picker = (NumberPicker) view.findViewById(R.id.playersNumberPicker);
         Button button = (Button) view.findViewById(R.id.goButton);
-
-        picker.setMinValue(2);
-        if (competitionType != null && competitionType.equals(LEAGUE)) {
-            picker.setMaxValue(24);
-        }else {
-            picker.setMaxValue(8);
-        }
-        picker.setWrapSelectorWheel(false);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Competition competition = null;
-                if (getArguments().getString(COMPETITION_TYPE, null).equals(LEAGUE)) {
+                Competition competition;
+                if (competitionType.equals(LEAGUE)) {
                     competition = League.getInstance(mainActivity, new ArrayList<Team>() {{
-                        for (int i = 1; i <= picker.getValue(); i++) {
+                        for (int i = 0; i < playersCountPicker.getValue(); i++) {
                             add(new Team("Equipe " + i));
                         }
                     }});
                 } else {
                     competition = Cup.getInstance(new ArrayList<Team>() {{
-                        for (int i = 1; i <= picker.getValue(); i++) {
+                        for (int i = 1; i <= playersCountPicker.getValue(); i++) {
                             add(new Team("Equipe " + i));
                         }
                     }});
@@ -65,5 +60,35 @@ public class PlayersFragment extends AbstractFragment {
             }
         });
         return view;
+    }
+
+    @Override
+    protected void onSetupModel(View inflatedView) {
+        super.onSetupModel(inflatedView);
+        competitionType = getArguments().getString(COMPETITION_TYPE);
+        onSetupView(inflatedView);
+    }
+
+    @Override
+    protected void onSetupView(View inflatedView) {
+        playersCountPicker = (NumberPicker) inflatedView.findViewById(R.id.playersNumberPicker);
+        playersCountPicker.setMinValue(2);
+        if (competitionType != null && competitionType.equals(LEAGUE)) {
+            playersCountPicker.setMaxValue(24);
+        } else {
+            playersCountPicker.setMaxValue(8);
+        }
+        playersCountPicker.setWrapSelectorWheel(false);
+        onSetupListener();
+    }
+
+    @Override
+    protected void onSetupListener() {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }
