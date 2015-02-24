@@ -10,13 +10,11 @@ import nsapp.com.footballfriendstournament.model.Match;
 public class Calendar extends ArrayList<Day> {
 
     public Calendar(Context context, final ArrayList<Team> teams) {
-        int count = 1;
         int taille = teams.size();
-        while (count < taille) {
+        for (int i = 1; i < taille; i++) {
             add(new Day(context, new ArrayList<Team>() {{
                 addAll(teams);
             }}));
-            count++;
         }
 
         taille = size();

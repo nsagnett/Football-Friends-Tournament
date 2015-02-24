@@ -117,11 +117,14 @@ public class Team {
     }
 
     public void removeContextMatch(Team adversary) {
-        int length = contextMatches.size();
-        for (int i = 0; i < length; i++) {
-            if (contextMatches.get(i).getAdversary().equals(adversary)) {
-                contextMatches.remove(i);
-                break;
+        int count = 0;
+        boolean done = false;
+        while (!done && count < contextMatches.size()){
+            if (contextMatches.get(count).getAdversary().getId() == adversary.getId()) {
+                contextMatches.remove(count);
+                done = true;
+            }else {
+                count++;
             }
         }
     }
