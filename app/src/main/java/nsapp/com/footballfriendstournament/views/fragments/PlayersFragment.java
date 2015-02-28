@@ -44,13 +44,13 @@ public class PlayersFragment extends AbstractFragment {
             public void onClick(View v) {
                 Competition competition;
                 if (competitionType.equals(LEAGUE)) {
-                    competition = League.getInstance(new ArrayList<Team>() {{
+                    competition = new League(new ArrayList<Team>() {{
                         for (int i = 0; i < playersCountPicker.getValue(); i++) {
                             add(new Team("Equipe " + i));
                         }
-                    }});
+                    }}, true);
                 } else {
-                    competition = Cup.getInstance(new ArrayList<Team>() {{
+                    competition = new Cup(new ArrayList<Team>() {{
                         for (int i = 1; i <= playersCountPicker.getValue(); i++) {
                             add(new Team("Equipe " + i));
                         }

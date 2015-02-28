@@ -12,7 +12,7 @@ class Calendar {
     private final ArrayList<Team> firstLineTeams = new ArrayList<>();
     private final ArrayList<Team> secondLineTeams = new ArrayList<>();
 
-    public Calendar(final ArrayList<Team> teams) {
+    public Calendar(final ArrayList<Team> teams, boolean includeBackMatches) {
         int length = teams.size();
 
         boolean isAtHome = true;
@@ -29,16 +29,17 @@ class Calendar {
             rotateTeams();
         }
 
-        // TODO Choisir aller ou aller retour
-        ArrayList<Match> backMatches = new ArrayList<>();
-        ArrayList<Day> tempDays = new ArrayList<Day>() {{
-            addAll(days);
-        }};
-        for (Day day : tempDays) {
-            for (Match m : day) {
-                backMatches.add(new Match(m.getOutside(), m.getHome()));
+        if (includeBackMatches) {
+            ArrayList<Match> backMatches = new ArrayList<>();
+            ArrayList<Day> tempDays = new ArrayList<Day>() {{
+                addAll(days);
+            }};
+            for (Day day : tempDays) {
+                for (Match m : day) {
+                    backMatches.add(new Match(m.getOutside(), m.getHome()));
+                }
+                days.add(new Day(backMatches));
             }
-            days.add(new Day(backMatches));
         }
     }
 

@@ -7,28 +7,13 @@ import nsapp.com.footballfriendstournament.model.Team;
 
 public class League implements Competition {
 
-    public static ArrayList<String> idsMatches = new ArrayList<>();
-
-    private static League instance;
-
     private ArrayList<Team> teams = new ArrayList<>();
     private final Calendar calendar;
     private final Ranking ranking;
 
-    public ArrayList<Team> getTeams() {
-        return teams;
-    }
-
-    public static League getInstance(ArrayList<Team> teams) {
-        if (instance == null) {
-            instance = new League(teams);
-        }
-        return instance;
-    }
-
-    private League(final ArrayList<Team> teams) {
+    public League(final ArrayList<Team> teams, boolean includeBackMatches) {
         this.teams.addAll(teams);
-        calendar = new Calendar(this.teams);
+        calendar = new Calendar(this.teams, includeBackMatches);
         ranking = new Ranking(this.teams);
     }
 

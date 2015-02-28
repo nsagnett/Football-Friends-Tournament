@@ -12,5 +12,6 @@
     <string name="error_loading">Cannot load more information</string>
     <string name="news">News</string>
     <string name="menu">Menu</string>
+    <string name="empty">Empty</string>
     <string name="loading">Chargement&#8230;</string>
 </resources>

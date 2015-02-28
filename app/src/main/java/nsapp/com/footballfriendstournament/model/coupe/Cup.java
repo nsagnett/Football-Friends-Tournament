@@ -4,16 +4,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import nsapp.com.footballfriendstournament.model.Competition;
-import nsapp.com.footballfriendstournament.model.Team;
 import nsapp.com.footballfriendstournament.model.Match;
+import nsapp.com.footballfriendstournament.model.Team;
 
 public class Cup implements Competition {
 
     public enum CupRank {
         QUARTERFINAL, SEMIFINAL, FINAL
     }
-
-    private static Cup instance;
 
     private CupRank cupRank;
     private ArrayList<Team> quartersTeams = new ArrayList<>();
@@ -48,14 +46,7 @@ public class Cup implements Competition {
         this.finalTeams = finalTeams;
     }
 
-    public static Cup getInstance(ArrayList<Team> teams) {
-        if (instance == null) {
-            instance = new Cup(teams);
-        }
-        return instance;
-    }
-
-    private Cup(final ArrayList<Team> teams) {
+    public Cup(final ArrayList<Team> teams) {
         Random random = new Random();
         switch (teams.size()) {
             case 2:
