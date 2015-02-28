@@ -11,12 +11,12 @@ import nsapp.com.footballfriendstournament.views.activities.MainActivity;
 
 public abstract class AbstractFragment extends Fragment implements View.OnClickListener {
 
-    protected static final String COMPETITION_TYPE = "competitionType";
-    protected static final String INDEX_ARTICLE = "indexArticle";
-    protected static final String LEAGUE = "League";
-    protected static final String CUP = "Cup";
+    static final String COMPETITION_TYPE = "competitionType";
+    static final String INDEX_ARTICLE = "indexArticle";
+    static final String LEAGUE = "League";
+    static final String CUP = "Cup";
 
-    protected MainActivity mainActivity;
+    MainActivity mainActivity;
 
     @Nullable
     @Override
@@ -24,7 +24,7 @@ public abstract class AbstractFragment extends Fragment implements View.OnClickL
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    protected void onSetupModel(View inflatedView) {
+    void onSetupModel(View inflatedView) {
         mainActivity = (MainActivity) getActivity();
         mainActivity.invalidateOptionsMenu();
     }
@@ -33,7 +33,7 @@ public abstract class AbstractFragment extends Fragment implements View.OnClickL
 
     protected abstract void onSetupListener();
 
-    protected void setTitle(String title) {
+    void setTitle(String title) {
         mainActivity.getSupportActionBar().setTitle(title);
     }
 }

@@ -27,7 +27,7 @@ public class NewsFragment extends AbstractFragment implements AdapterView.OnItem
 
     private SwipeRefreshLayout swipeRefreshLayout;
     private ListView listView;
-    private ArrayList<RSSItem> rssItemsLimited = new ArrayList<>();
+    private final ArrayList<RSSItem> rssItemsLimited = new ArrayList<>();
     private NewsAdapter newsAdapter;
     private int preLast;
 
@@ -49,7 +49,7 @@ public class NewsFragment extends AbstractFragment implements AdapterView.OnItem
         super.onSetupModel(inflatedView);
         setTitle(getString(R.string.news));
         COUNT_VISIBLE_ITEMS = 10;
-        if (Tool.news != null && Tool.news.size() > 1) {
+        if (Tool.news.size() > 1) {
             rssItemsLimited.addAll(Tool.getLimitedItems(Tool.news, COUNT_VISIBLE_ITEMS));
         }
         onSetupView(inflatedView);

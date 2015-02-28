@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import nsapp.com.footballfriendstournament.model.Team;
 
-public class Ranking extends ArrayList<Team> {
+class Ranking extends ArrayList<Team> {
 
     public Ranking(ArrayList<Team> teams) {
         addAll(teams);

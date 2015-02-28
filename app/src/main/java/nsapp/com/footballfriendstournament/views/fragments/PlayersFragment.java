@@ -44,7 +44,7 @@ public class PlayersFragment extends AbstractFragment {
             public void onClick(View v) {
                 Competition competition;
                 if (competitionType.equals(LEAGUE)) {
-                    competition = League.getInstance(mainActivity, new ArrayList<Team>() {{
+                    competition = League.getInstance(new ArrayList<Team>() {{
                         for (int i = 0; i < playersCountPicker.getValue(); i++) {
                             add(new Team("Equipe " + i));
                         }

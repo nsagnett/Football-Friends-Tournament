@@ -6,7 +6,7 @@ import nsapp.com.footballfriendstournament.model.rss.RSSItem;
 
 public class Tool {
 
-    public static ArrayList<RSSItem> news = new ArrayList<>();
+    public static final ArrayList<RSSItem> news = new ArrayList<>();
 
     public static ArrayList<RSSItem> getLimitedItems(ArrayList<RSSItem> list, int count) {
         ArrayList<RSSItem> result = new ArrayList<>();

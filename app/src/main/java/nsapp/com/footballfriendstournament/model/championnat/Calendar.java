@@ -1,30 +1,55 @@
 package nsapp.com.footballfriendstournament.model.championnat;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 
-import nsapp.com.footballfriendstournament.model.Team;
 import nsapp.com.footballfriendstournament.model.Match;
+import nsapp.com.footballfriendstournament.model.Team;
 
-public class Calendar extends ArrayList<Day> {
+class Calendar {
 
-    public Calendar(Context context, final ArrayList<Team> teams) {
-        int taille = teams.size();
-        for (int i = 1; i < taille; i++) {
-            add(new Day(context, new ArrayList<Team>() {{
-                addAll(teams);
-            }}));
+    private final ArrayList<Day> days = new ArrayList<>();
+
+    private final ArrayList<Team> firstLineTeams = new ArrayList<>();
+    private final ArrayList<Team> secondLineTeams = new ArrayList<>();
+
+    public Calendar(final ArrayList<Team> teams) {
+        int length = teams.size();
+
+        boolean isAtHome = true;
+        for (int i = 0; i < length / 2; i++) {
+            firstLineTeams.add(teams.get(i));
+            secondLineTeams.add(teams.get(length - (i + 1)));
+            isAtHome = !isAtHome;
         }
 
-        taille = size();
-        for (int i = 0; i < taille; i++) {
-            Day day = get(i);
-            ArrayList<Match> matches = new ArrayList<>();
+        boolean isFirstTime = true;
+        while (isFirstTime || firstLineTeams.get(1).getId() != 2) {
+            isFirstTime = false;
+            days.add(new Day(firstLineTeams, secondLineTeams));
+            rotateTeams();
+        }
+
+        // TODO Choisir aller ou aller retour
+        ArrayList<Match> backMatches = new ArrayList<>();
+        ArrayList<Day> tempDays = new ArrayList<Day>() {{
+            addAll(days);
+        }};
+        for (Day day : tempDays) {
             for (Match m : day) {
-                matches.add(new Match(m.getOutside(), m.getHome()));
+                backMatches.add(new Match(m.getOutside(), m.getHome()));
             }
-            add(new Day(matches));
+            days.add(new Day(backMatches));
         }
+    }
+
+    private void rotateTeams() {
+        firstLineTeams.add(1, secondLineTeams.get(0));
+        secondLineTeams.remove(0);
+        secondLineTeams.add(firstLineTeams.get(firstLineTeams.size() - 1));
+        firstLineTeams.remove(firstLineTeams.size() - 1);
+    }
+
+    public ArrayList<Day> getDays() {
+        return days;
     }
 }

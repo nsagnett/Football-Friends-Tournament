@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 public class RSSItem implements Serializable {
 
-    private String title;
-    private String description;
-    private String link;
-    private String source;
+    private final String title;
+    private final String description;
+    private final String link;
+    private final String source;
 
     public RSSItem(String title, String description, String link, String source) {
         this.title = title;

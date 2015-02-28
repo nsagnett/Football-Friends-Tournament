@@ -1,13 +1,9 @@
 package nsapp.com.footballfriendstournament.model;
 
-import java.util.ArrayList;
-
-import nsapp.com.footballfriendstournament.model.championnat.ContextMatch;
-
 public class Team {
 
     private static int uniqueID = 0;
-    private int id;
+    private final int id;
     private boolean exempt;
     private String name;
     private int matchesCount;
@@ -20,8 +16,6 @@ public class Team {
     private int redCards;
     private String goalDifference;
     private int points;
-
-    private ArrayList<ContextMatch> contextMatches;
 
     public int getId() {
         return id;
@@ -79,14 +73,6 @@ public class Team {
         return matchesCount;
     }
 
-    public ArrayList<ContextMatch> getContextMatches() {
-        return contextMatches;
-    }
-
-    public void setContextMatches(ArrayList<ContextMatch> contextMatches) {
-        this.contextMatches = contextMatches;
-    }
-
     private void updateStats(int goalsFor, int goalsAgainst, int redCards, int yellowCards) {
         this.matchesCount++;
         this.goalsFor += goalsFor;
@@ -116,19 +102,6 @@ public class Team {
         defeats++;
     }
 
-    public void removeContextMatch(Team adversary) {
-        int count = 0;
-        boolean done = false;
-        while (!done && count < contextMatches.size()){
-            if (contextMatches.get(count).getAdversary().getId() == adversary.getId()) {
-                contextMatches.remove(count);
-                done = true;
-            }else {
-                count++;
-            }
-        }
-    }
-
     public Team(String name) {
         uniqueID++;
         id = uniqueID;
@@ -141,7 +114,6 @@ public class Team {
         goalsFor = 0;
         yellowCards = 0;
         redCards = 0;
-        contextMatches = new ArrayList<>();
     }
 
     public Team(String name, int wins, int draws, int defeats, int goalsFor, int goalsAgainst, int yellowCards, int redCards, String goalDifference, int points) {

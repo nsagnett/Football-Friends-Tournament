@@ -20,8 +20,8 @@ public class Cup implements Competition {
     private ArrayList<Team> semiTeams = new ArrayList<>();
     private ArrayList<Team> finalTeams = new ArrayList<>();
 
-    private ArrayList<Match> quartersMatches = new ArrayList<>();
-    private ArrayList<Match> semiMatches = new ArrayList<>();
+    private final ArrayList<Match> quartersMatches = new ArrayList<>();
+    private final ArrayList<Match> semiMatches = new ArrayList<>();
     private Match finalMatch;
 
     public ArrayList<Team> getQuartersTeams() {

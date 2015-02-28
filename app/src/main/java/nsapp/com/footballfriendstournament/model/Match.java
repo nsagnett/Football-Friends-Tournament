@@ -10,8 +10,8 @@ public class Match {
         return outside;
     }
 
-    private Team home;
-    private Team outside;
+    private final Team home;
+    private final Team outside;
     private boolean isFinished;
 
     public Match() {

@@ -5,11 +5,6 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_example">Example action</string>
-
     <string name="action_rss">Feed</string>
     <string name="action_arrow_bottom">Previous</string>
     <string name="action_arrow_top">Next</string>
