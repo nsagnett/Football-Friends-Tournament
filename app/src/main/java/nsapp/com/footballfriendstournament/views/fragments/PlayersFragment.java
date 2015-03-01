@@ -21,6 +21,8 @@ public class PlayersFragment extends AbstractFragment {
 
     private String competitionType;
 
+    private String[] array;
+
     public static PlayersFragment newInstance(String competitionType) {
         PlayersFragment playersFragment = new PlayersFragment();
         Bundle args = new Bundle();
@@ -43,15 +45,16 @@ public class PlayersFragment extends AbstractFragment {
             @Override
             public void onClick(View v) {
                 Competition competition;
+                final int playersCount = Integer.parseInt(array[playersCountPicker.getValue()]);
                 if (competitionType.equals(LEAGUE)) {
                     competition = new League(new ArrayList<Team>() {{
-                        for (int i = 0; i < playersCountPicker.getValue(); i++) {
+                        for (int i = 0; i < playersCount; i++) {
                             add(new Team("Equipe " + i));
                         }
                     }}, true);
                 } else {
                     competition = new Cup(new ArrayList<Team>() {{
-                        for (int i = 1; i <= playersCountPicker.getValue(); i++) {
+                        for (int i = 1; i <= playersCount; i++) {
                             add(new Team("Equipe " + i));
                         }
                     }});
@@ -72,11 +75,15 @@ public class PlayersFragment extends AbstractFragment {
     @Override
     protected void onSetupView(View inflatedView) {
         playersCountPicker = (NumberPicker) inflatedView.findViewById(R.id.playersNumberPicker);
-        playersCountPicker.setMinValue(2);
+        playersCountPicker.setMinValue(0);
         if (competitionType != null && competitionType.equals(LEAGUE)) {
-            playersCountPicker.setMaxValue(24);
+            array = getResources().getStringArray(R.array.pairNumberArray);
+            playersCountPicker.setMaxValue(array.length - 1);
+            playersCountPicker.setDisplayedValues(array);
         } else {
-            playersCountPicker.setMaxValue(8);
+            array = getResources().getStringArray(R.array.cupNumberArray);
+            playersCountPicker.setMaxValue(array.length - 1);
+            playersCountPicker.setDisplayedValues(array);
         }
         playersCountPicker.setWrapSelectorWheel(false);
         onSetupListener();
