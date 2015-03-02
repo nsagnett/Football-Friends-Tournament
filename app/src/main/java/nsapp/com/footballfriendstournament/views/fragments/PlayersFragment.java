@@ -58,8 +58,9 @@ public class PlayersFragment extends AbstractFragment {
                             add(new Team("Equipe " + i));
                         }
                     }});
+                    mainActivity.setCompetition(competition);
+                    mainActivity.prepareOnReplaceTransaction(CupPhaseFragment.newInstance());
                 }
-                mainActivity.setCompetition(competition);
             }
         });
         return view;

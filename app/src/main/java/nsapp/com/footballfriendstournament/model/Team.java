@@ -4,19 +4,19 @@ public class Team {
 
     private static int uniqueID = 0;
     private final int id;
-    private boolean exempt;
     private String name;
     private int matchesCount;
     private int wins;
     private int draws;
     private int defeats;
+
     private int goalsFor;
+
     private int goalsAgainst;
     private int yellowCards;
     private int redCards;
     private String goalDifference;
     private int points;
-
     public int getId() {
         return id;
     }
@@ -41,6 +41,10 @@ public class Team {
         return goalsFor;
     }
 
+    public void setGoalsFor(int goalsFor) {
+        this.goalsFor = goalsFor;
+    }
+
     public int getGoalsAgainst() {
         return goalsAgainst;
     }
@@ -59,14 +63,6 @@ public class Team {
 
     public int getPoints() {
         return points;
-    }
-
-    public boolean exempt() {
-        return exempt;
-    }
-
-    public void setExempt(boolean exempt) {
-        this.exempt = exempt;
     }
 
     public int getMatchesCount() {

@@ -14,4 +14,6 @@
     <string name="menu">Menu</string>
     <string name="empty">Empty</string>
     <string name="loading">Chargement&#8230;</string>
+
+    <string name="score_format">&#160;%1$d : %2$d&#160;</string>
 </resources>
